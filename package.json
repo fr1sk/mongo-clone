@@ -1,0 +1,28 @@
+{
+  "name": "mongo-clone",
+  "version": "1.0.0",
+  "description": "CLI tool for cloning mongoDB database from one server to another",
+  "main": "index.js",
+  "scripts": {
+    "test": "mongo-clone from OLDMONGOURI to NEWMONGOURI"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fr1sk/mongo-clone.git"
+  },
+  "keywords": [
+    "mongo",
+    "copy",
+    "database",
+    "clone",
+    "DB",
+    "mongoDB",
+    "migrate"
+  ],
+  "author": "Marko Jovanovic - fr1sk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fr1sk/mongo-clone/issues"
+  },
+  "homepage": "https://github.com/fr1sk/mongo-clone#readme"
+}
