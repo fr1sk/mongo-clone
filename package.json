@@ -2,7 +2,7 @@
   "name": "mongo-clone",
   "version": "1.0.0",
   "description": "CLI tool for cloning mongoDB database from one server to another",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mongo-clone from OLDMONGOURI to NEWMONGOURI"
   },
@@ -24,5 +24,16 @@
   "bugs": {
     "url": "https://github.com/fr1sk/mongo-clone/issues"
   },
-  "homepage": "https://github.com/fr1sk/mongo-clone#readme"
+  "homepage": "https://github.com/fr1sk/mongo-clone#readme",
+  "bin": {
+    "mongo-clone": "src/index.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.2",
+    "cli-progress": "^2.1.0",
+    "commander": "^2.17.1",
+    "mongodb": "^2.2.33",
+    "single-line-log": "^1.1.2",
+    "sprintf-js": "^1.1.1"
+  }
 }
