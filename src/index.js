@@ -27,31 +27,37 @@ const loadDbFromUrl = async (mongoUrl) => {
     }
 }
 
-const copyCollection = async (source, target, name, bar) => {
+const copyCollection = async (source, target, name) => {
     try {
-        const sourceCollection = await source.collection(name);
-        const targetCollection = await target.collection(name);
-        const allData = await sourceCollection.find().toArray();
-        const size = await sourceCollection.count();
-        let i = 1;
-        await Promise.all(allData.map(async (d) => {
-            try {
-                if (i === 1) {
-                    bar.start(size, 0);
-                } else if (i === size) {
-                    console.log('\n')
-                    bar.stop();
+        return new Promise(async (res, rej) => {
+            const sourceCollection = await source.collection(name);
+            const targetCollection = await target.collection(name);
+            const allData = await sourceCollection.find().toArray();
+            const size = await sourceCollection.count();
+            let i = 0;
+            let bar = await new _cliProgress.Bar({
+                format: '📦  [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | Cloning ' + name + '...'
+            }, _cliProgress.Presets.rect);
+            await Promise.all(allData.map(async (d) => {
+                try {
+                    if (i === 0) {
+                        await bar.start(size, 0);
+                    } 
+                    
+                    await targetCollection.insert(d, { safe: true });
+                    await bar.update(++i);
+                    if (i === size) {
+                        return res(bar.stop());
+                    }
+                    // log(sprintf(`📦  Cloning ${name}%'.30s`, `${i++}/${size}`));
+                } catch (e) {
+                    console.log()
+                    console.error('\x1b[31m%s\x1b[0m', '🚫  Error inserting in the new collection! Probably duplicated data is already inside new DB.');
+                    return rej(process.exit(1));
                 }
-                // await targetCollection.insert(d, { safe: true });
-                bar.update(i++);
-                // log(sprintf(`📦  Cloning ${name}%'.30s`, `${i++}/${size}`));
-            } catch (e) {
-                console.log()
-                console.error('\x1b[31m%s\x1b[0m', '🚫  Error inserting in the new collection! Probably duplicated data is already inside new DB.');
-                process.exit(1);
-            }
-        }));
-        await bar.stop();
+            }));
+            await bar.stop();
+        });
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m', '🚫  Error copying the collection!');
         process.exit(1);
@@ -63,19 +69,16 @@ const main = async (sourceDbUrl, targetDbUrl) => {
         const clientSource = await loadDbFromUrl(sourceDbUrl);
         const clientTarget = await loadDbFromUrl(targetDbUrl);
         const collections = await clientSource.listCollections().toArray();
-        
         return new Promise(async (res, rej) => {
-            await res(await Promise.all(collections.map(async (c) => {
+            await Promise.all(collections.map(async (c) => {
                     if (c.name != 'system.indexes') {
-                        let bar = await new _cliProgress.Bar({
-                            format: '📦  [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | Cloning ' + c.name + '...'
-                        }, _cliProgress.Presets.rect);
-                        await copyCollection(clientSource, clientTarget, c.name, bar);
-                    } else {
-                        console.log('\x1b[33m%s\x1b[0m', '⚠️  Cannot clone system.indexes, please copy them manualy!');
+                        await copyCollection(clientSource, clientTarget, c.name);
                     }
-                })),
-                await process.exit(0));
+                    // } else {
+                    //     console.log('\x1b[33m%s\x1b[0m', '⚠️  Cannot clone all system.indexes, please copy them manualy if you want to use them!');
+                    // }
+                }));
+            return res(await process.exit(0));
         });
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m', '🚫  Error copying the collection!');
