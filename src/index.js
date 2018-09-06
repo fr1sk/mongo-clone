@@ -33,7 +33,7 @@ const copyCollection = async (source, target, name) => {
             const sourceCollection = await source.collection(name);
             const targetCollection = await target.collection(name);
             const allData = await sourceCollection.find().toArray();
-            const size = await sourceCollection.count();
+            const size = allData.length;
             let i = 0;
             let bar = await new _cliProgress.Bar({
                 format: '📦  [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | Cloning ' + name + '...'
