@@ -42,7 +42,7 @@ const copyCollection = async (source, target, name, bar) => {
                         await bar.progress.start(bar.globalCountOfData, 0);
                     } 
                     
-                    // await targetCollection.insert(d, { safe: true });
+                    await targetCollection.insert(d, { safe: true });
                     
                     bar.progress.update(++currData, {
                         speed: name
