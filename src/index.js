@@ -55,7 +55,7 @@ const copyCollection = async (source, target, name, bar) => {
                     }
                 } catch (e) {
                     // console.log(e)
-                    console.error('\x1b[31m%s\x1b[0m', '🚫  Error inserting in the new collection! Probably duplicated data is already inside new DB.');
+                    console.error('\x1b[31m%s\x1b[0m', '\n🚫  Error inserting in the new collection! Probably duplicated data is already inside new DB.');
                     return rej(process.exit(1));
                 }
             }));
