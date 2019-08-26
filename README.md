@@ -27,6 +27,9 @@ Mongo URL example: <br>
 * If you like it buy me a beer 🍺 <br>
 My BTC addresse: `1KUxHZT6H9aSHQrNZvb1qw6ZvRJ6VEApWu`
 
+## 👨🏻‍🔧👩🏻‍🔧 Collaborators
+[Raschid J.F. Rafeally]([npm](http://npmjs.org))
+
 ## 📺 Demo
 ![mongo-clone demo1](https://raw.githubusercontent.com/fr1sk/mongo-clone/master/demo/mongo-clone1.png "mongo-clone: without arguments")<br>
 _mongo-clone: without arguments!_<br><br>
